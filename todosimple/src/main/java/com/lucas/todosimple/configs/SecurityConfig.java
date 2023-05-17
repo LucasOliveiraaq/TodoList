@@ -1,5 +1,7 @@
 package com.lucas.todosimple.configs;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,20 +19,39 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    
-    private static final String[] PUBLIC_MATCHERS = { //Qual a rota do sistema é publica 
-        "/"
+
+    private static final String[] PUBLIC_MATCHERS = {
+            "/"
+    };
+    private static final String[] PUBLIC_MATCHERS_POST = {
+            "/user",
+            "/login"
     };
 
-    private static final String[] PUBLIC_MATCHERS_POST = { //Qual a rota do sistema é publica para post
-        "/user",
-        "/login"
-    };
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable(); //desativa proteção de varios request que o spring cria(Para ambiente de desenvolvimento é ok desativar).
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // define que o Spring Security não criará ou usará sessões HTTP para armazenar informações de autenticação.
-       // http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+
+        http.cors().and().csrf().disable();
+        http.authorizeRequests().requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated(); //Não sei se vai funcionar
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    /*
+     * Quando usario criar a senha vai criptografar e quando logar no sistema vai descriptografar.
+     */
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
     }
         
 } 
