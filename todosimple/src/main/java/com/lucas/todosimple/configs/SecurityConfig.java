@@ -20,10 +20,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_MATCHERS = {
+    private static final String[] PUBLIC_MATCHERS = { //Qual a rota do sistema é publica 
             "/"
     };
-    private static final String[] PUBLIC_MATCHERS_POST = {
+    private static final String[] PUBLIC_MATCHERS_POST = { //Qual a rota do sistema é publica para post
             "/user",
             "/login"
     };

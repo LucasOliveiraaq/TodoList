@@ -3,17 +3,26 @@ package com.lucas.todosimple.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.lucas.todosimple.models.User;
+import com.lucas.todosimple.models.enums.ProfileEnum;
 import com.lucas.todosimple.repositories.UserRepository;
 import com.lucas.todosimple.services.exceptions.DataBindingViolationException;
 import com.lucas.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
-    
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserRepository userRepository;
 
@@ -24,6 +33,8 @@ public class UserService {
 
     @Transactional
     public User create(User user){
+        user.setPassWord(this.bCryptPasswordEncoder.encode(user.getPassWord()));
+        user.setProfiles(Stream.of(ProfileEnum.USER.getId()).collect(Collectors.toSet()));
         user = this.userRepository.save(user);
         return user;
     }
@@ -31,6 +42,7 @@ public class UserService {
     public User updatePassWord(User user){
         User newUser = findById(user.getId());
         newUser.setPassWord(user.getPassWord());
+        newUser.setPassWord(this.bCryptPasswordEncoder.encode(user.getPassWord()));
         return this.userRepository.save(newUser);
     }
 
