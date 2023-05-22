@@ -67,7 +67,7 @@ public class User {
     @Column(name = "profile", nullable = false)
     private Set<Integer> profiles = new HashSet<>();
 
-    private Set<ProfileEnum> getProfiles(){
+    public Set<ProfileEnum> getProfiles(){
         return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
     }
 
