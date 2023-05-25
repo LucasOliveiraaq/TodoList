@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import com.lucas.todosimple.security.JWTUtil;
 import com.lucas.todosimple.services.UserDetailsServiceImpl;
 
 @Configuration
@@ -30,6 +31,9 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     private static final String[] PUBLIC_MATCHERS = { //Qual a rota do sistema é publica 
             "/"
