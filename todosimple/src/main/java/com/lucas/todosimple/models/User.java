@@ -48,7 +48,7 @@ public class User {
     @NotNull(groups = CreateUser.class)
     @jakarta.validation.constraints.NotEmpty(groups = CreateUser.class)
     @jakarta.validation.constraints.Size(groups = CreateUser.class, min = 2, max = 100)
-    private String userNome;
+    private String username;
 
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password", length = 60, nullable = false)

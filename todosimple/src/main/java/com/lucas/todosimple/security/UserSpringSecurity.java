@@ -18,28 +18,18 @@ import lombok.NoArgsConstructor;
 public class UserSpringSecurity implements UserDetails{
 
     private Long id;
-    private String userName;
-    private String passWord;
+    private String username;
+    private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
 
     public UserSpringSecurity(Long id, String userName, String passWord, Set<ProfileEnum> profileEnums) {
         this.id = id;
-        this.userName = userName;
-        this.passWord = passWord;
+        this.username = userName;
+        this.password = passWord;
         // Mapeando os perfis (profileEnums) para uma lista de SimpleGrantedAuthority
         this.authorities = profileEnums.stream().map(x -> new SimpleGrantedAuthority(x.getDescricao())) // Mapeia cada perfil para SimpleGrantedAuthority
         .collect(Collectors.toList()); // Coleta todos os elementos mapeados em uma nova lista
-    }
-
-    @Override
-    public String getPassword() {
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
-    }
-
-    @Override
-    public String getUsername() {
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
     }
 
     @Override

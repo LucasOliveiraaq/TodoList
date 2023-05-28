@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import com.lucas.todosimple.security.JWTAuthenticationFilter;
 import com.lucas.todosimple.security.JWTUtil;
 import com.lucas.todosimple.services.UserDetailsServiceImpl;
 
@@ -51,7 +52,8 @@ public class SecurityConfig {
         authenticationManagerBuilder.userDetailsService(this.userDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder());
         this.authenticationManager = authenticationManagerBuilder.build();
-        http.authorizeRequests().requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated(); //Não sei se vai funcionar
+        http.authorizeRequests().requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll().requestMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated().and().authenticationManager(authenticationManager); //Não sei se vai funcionar
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }

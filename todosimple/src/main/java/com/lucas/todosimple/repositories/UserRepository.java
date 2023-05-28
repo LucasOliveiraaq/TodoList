@@ -6,10 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lucas.todosimple.models.User;
 
-
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{    
 
     @Transactional(readOnly = true)
-    User findByUserName(String UserName);
+    User findByUsername (String username);
 }
